@@ -15,11 +15,12 @@ use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ProductTypeController;
 use App\Http\Controllers\ReturnPolicyController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ServiceEnquiryController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\UnitTypeController;
 use App\Http\Controllers\UserController;
-
+use App\Models\ServiceEnquiry;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -74,6 +75,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             'only' => ['index', 'show']
         ]
     );
+    Route::apiResource('service-enquiries',ServiceEnquiryController::class)->only(['store']);
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
@@ -95,5 +97,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         'sliders' => SliderController::class,
         'brands' => BrandController::class,
         'boxes' => BoxController::class,
+        'service-enquiries'=>ServiceEnquiryController::class,
     ]);
 });
