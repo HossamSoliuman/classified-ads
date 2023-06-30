@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             ReviewSeeder::class,
             ServiceEnquirySeeder::class,
             PostSeeder::class,
+            CommentSeeder::class,
         ]);
     }
 }

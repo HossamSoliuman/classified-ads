@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\BoxController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\ModeOfPaymentController;
 use App\Http\Controllers\OfferTypeController;
@@ -40,9 +41,9 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', [AuthenticationController::class, 'login']);
 Route::post('register', [AuthenticationController::class, 'register']);
 Route::post('home/search', [HomePageController::class, 'search']);
-Route::apiResource('sliders', SliderController::class)->only(['index', 'show']);
-Route::get('ads/{ad}/reviews',[AdController::class,'reviews']);
-Route::get('categories/{category}/posts',[CategoryController::class,'posts']);
+Route::get('ads/{ad}/reviews', [AdController::class, 'reviews']);
+Route::get('categories/{category}/posts', [CategoryController::class, 'posts']);
+Route::get('posts/{post}/comments',[PostController::class,'comments']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [AuthenticationController::class, 'logout']);
@@ -51,8 +52,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('auth', [UserController::class, 'auth']);
     Route::apiResources([
         'reviews' => ReviewController::class,
+        'comments' => CommentController::class,
         'ads' => AdController::class,
-    ]);
+    ], ['except' => ['index']]);
     Route::apiResources(
         [
             'areas' => AreaController::class,
@@ -72,13 +74,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
         [
             'brands' => BrandController::class,
             'boxes' => BoxController::class,
+            'sliders' => SliderController::class
         ],
         [
             'only' => ['index', 'show']
         ]
     );
-    Route::apiResource('service-enquiries',ServiceEnquiryController::class)->only(['store']);
-    Route::apiResource('posts',PostController::class)->only(['show']);
+    Route::apiResource('service-enquiries', ServiceEnquiryController::class)->only(['store']);
+    Route::apiResource('posts', PostController::class)->only(['show']);
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
@@ -100,7 +103,8 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         'sliders' => SliderController::class,
         'brands' => BrandController::class,
         'boxes' => BoxController::class,
-        'service-enquiries'=>ServiceEnquiryController::class,
-        'posts'=>PostController::class,
+        'service-enquiries' => ServiceEnquiryController::class,
+        'posts' => PostController::class,
+        'comments' => CommentController::class,
     ]);
 });

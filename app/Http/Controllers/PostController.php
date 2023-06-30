@@ -75,4 +75,10 @@ class PostController extends Controller
 
         return $this->customResponse(null, 'Post deleted successfully');
     }
+    public function comments(Post $post){
+        $post->load(['comments'=>function($query){
+            $query->orderBy('id','desc')->paginate(10);
+        }]);
+        return $this->successResponse($post);
+    }
 }

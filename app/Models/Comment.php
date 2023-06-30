@@ -5,17 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class Comment extends Model
 {
     use HasFactory;
-    const PATH='images/posts';
     protected $fillable=[
-        'title',
         'body',
-        'image',
-        'category_id',
+        'user_id',
+        'post_id',
     ];
-    public function comments(){
-        return $this->hasMany(Comment::class);
-    }
 }
