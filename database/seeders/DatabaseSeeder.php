@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             ProductImageSeeder::class,
             ReviewSeeder::class,
             ServiceEnquirySeeder::class,
+            PostSeeder::class,
         ]);
     }
 }

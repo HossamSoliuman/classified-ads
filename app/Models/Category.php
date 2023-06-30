@@ -23,4 +23,7 @@ class Category extends Model
     public function banner(){
         return $this->hasone(Banner::class,'parent_id')->where('type',Banner::SUBCATEGORY_TYPE);
     }
+    public function posts(){
+        return $this->hasMany(Post::class);
+    }
 }

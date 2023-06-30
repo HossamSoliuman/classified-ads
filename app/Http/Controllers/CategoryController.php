@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use App\Http\Resources\CategoryResource;
 use App\Http\Resources\PaginatedResource;
 use App\Models\Ad;
 use App\Traits\ApiResponse;
@@ -92,10 +93,21 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $this->deleteFile($category->image);
-        if($category->banner)
-        $this->deleteFile($category->banner->image);
+        if ($category->banner)
+            $this->deleteFile($category->banner->image);
         $category->banner()->delete();
         $category->delete();
         return $this->customResponse([], 'Successfully deleted');
+    }
+   
+    public function posts(Category $category)
+    {
+        $category->load(['posts' => function ($query) {
+            $query->orderBy('id', 'desc');
+        }])->paginate(10);
+
+        return $this->successResponse(
+            CategoryResource::make($category)
+        );
     }
 }
