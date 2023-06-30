@@ -5,8 +5,10 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\ProductType;
+use App\Models\Service;
 use App\Models\SubCategory;
 use Illuminate\Database\Seeder;
+use Symfony\Component\HttpKernel\DependencyInjection\ServicesResetter;
 
 class DatabaseSeeder extends Seeder
 {
@@ -35,6 +37,7 @@ class DatabaseSeeder extends Seeder
             ServiceEnquirySeeder::class,
             PostSeeder::class,
             CommentSeeder::class,
+            ServiceSeeder::class,
         ]);
     }
 }

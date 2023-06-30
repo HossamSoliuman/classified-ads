@@ -17,7 +17,8 @@ class ServiceFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'title'=>fake()->sentence(),
+            'body'=>fake()->text(),
         ];
     }
 }

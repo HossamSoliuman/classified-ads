@@ -13,7 +13,7 @@ class UpdateServiceRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class UpdateServiceRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title'=>'nullable|string',
+            'body'=>'nullable|string',
         ];
     }
 }

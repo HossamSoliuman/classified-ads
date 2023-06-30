@@ -17,6 +17,7 @@ use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ProductTypeController;
 use App\Http\Controllers\ReturnPolicyController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ServiceEnquiryController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SubCategoryController;
@@ -43,7 +44,7 @@ Route::post('register', [AuthenticationController::class, 'register']);
 Route::post('home/search', [HomePageController::class, 'search']);
 Route::get('ads/{ad}/reviews', [AdController::class, 'reviews']);
 Route::get('categories/{category}/posts', [CategoryController::class, 'posts']);
-Route::get('posts/{post}/comments',[PostController::class,'comments']);
+Route::get('posts/{post}/comments', [PostController::class, 'comments']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [AuthenticationController::class, 'logout']);
@@ -74,7 +75,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         [
             'brands' => BrandController::class,
             'boxes' => BoxController::class,
-            'sliders' => SliderController::class
+            'sliders' => SliderController::class,
+            'services' => ServiceController::class,
         ],
         [
             'only' => ['index', 'show']
@@ -106,5 +108,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         'service-enquiries' => ServiceEnquiryController::class,
         'posts' => PostController::class,
         'comments' => CommentController::class,
+        'services' => ServiceController::class,
     ]);
 });

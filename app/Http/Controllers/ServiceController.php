@@ -1,13 +1,15 @@
-<?php
-
+<?php 
 namespace App\Http\Controllers;
 
 use App\Models\Service;
 use App\Http\Requests\StoreServiceRequest;
 use App\Http\Requests\UpdateServiceRequest;
+use App\Traits\ApiResponse;
 
 class ServiceController extends Controller
 {
+    use ApiResponse;
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +17,8 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        //
+        $services = Service::all();
+        return $this->successResponse($services);
     }
 
     /**
@@ -26,7 +29,9 @@ class ServiceController extends Controller
      */
     public function store(StoreServiceRequest $request)
     {
-        //
+        $service = Service::create($request->validated());
+
+        return $this->successResponse($service);
     }
 
     /**
@@ -37,7 +42,7 @@ class ServiceController extends Controller
      */
     public function show(Service $service)
     {
-        //
+        return $this->successResponse($service);
     }
 
     /**
@@ -49,7 +54,9 @@ class ServiceController extends Controller
      */
     public function update(UpdateServiceRequest $request, Service $service)
     {
-        //
+        $service->update($request->validated());
+
+        return $this->successResponse($service);
     }
 
     /**
@@ -60,6 +67,8 @@ class ServiceController extends Controller
      */
     public function destroy(Service $service)
     {
-        //
+        $service->delete();
+
+        return $this->customResponse(null, 'Service deleted successfully');
     }
 }
