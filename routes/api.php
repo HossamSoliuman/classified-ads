@@ -21,6 +21,7 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ServiceEnquiryController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SubCategoryController;
+use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\UnitTypeController;
 use App\Http\Controllers\UserController;
 use App\Models\ServiceEnquiry;
@@ -51,11 +52,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('users', UserController::class)->only(['show']);
     Route::post('users', [UserController::class, 'update']);
     Route::get('auth', [UserController::class, 'auth']);
-    Route::apiResources([
-        'reviews' => ReviewController::class,
-        'comments' => CommentController::class,
-        'ads' => AdController::class,
-    ], ['except' => ['index']]);
+    Route::apiResources(
+        [
+            'reviews' => ReviewController::class,
+            'comments' => CommentController::class,
+            'ads' => AdController::class,
+        ],
+        ['except' => ['index']]
+    );
     Route::apiResources(
         [
             'areas' => AreaController::class,
@@ -77,6 +81,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             'boxes' => BoxController::class,
             'sliders' => SliderController::class,
             'services' => ServiceController::class,
+            'testimonials' => TestimonialController::class,
         ],
         [
             'only' => ['index', 'show']
@@ -109,5 +114,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         'posts' => PostController::class,
         'comments' => CommentController::class,
         'services' => ServiceController::class,
+        'testimonials' => TestimonialController::class,
     ]);
 });

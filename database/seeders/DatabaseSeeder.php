@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\ProductType;
 use App\Models\Service;
 use App\Models\SubCategory;
+use App\Models\Testimonial;
 use Illuminate\Database\Seeder;
 use Symfony\Component\HttpKernel\DependencyInjection\ServicesResetter;
 
@@ -38,6 +39,7 @@ class DatabaseSeeder extends Seeder
             PostSeeder::class,
             CommentSeeder::class,
             ServiceSeeder::class,
+            TestimonialSeeder::class,
         ]);
     }
 }
