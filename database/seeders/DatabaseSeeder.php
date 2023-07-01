@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
             CommentSeeder::class,
             ServiceSeeder::class,
             TestimonialSeeder::class,
+            OurServiceEnquirySeeder::class,
         ]);
     }
 }

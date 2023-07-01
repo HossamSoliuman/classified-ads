@@ -11,6 +11,7 @@ use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\ModeOfPaymentController;
 use App\Http\Controllers\OfferTypeController;
 use App\Http\Controllers\OrderTypeController;
+use App\Http\Controllers\OurServiceEnquiryController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PriceTypeController;
 use App\Http\Controllers\ProductImageController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\UnitTypeController;
 use App\Http\Controllers\UserController;
+use App\Models\OurServiceEnquiry;
 use App\Models\ServiceEnquiry;
 use Illuminate\Support\Facades\Route;
 
@@ -46,6 +48,8 @@ Route::post('home/search', [HomePageController::class, 'search']);
 Route::get('ads/{ad}/reviews', [AdController::class, 'reviews']);
 Route::get('categories/{category}/posts', [CategoryController::class, 'posts']);
 Route::get('posts/{post}/comments', [PostController::class, 'comments']);
+Route::apiResource('service-enquiries', ServiceEnquiryController::class)->only(['store']);
+Route::apiResource('our-service-enquiries', OurServiceEnquiryController::class)->only(['store']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [AuthenticationController::class, 'logout']);
@@ -87,7 +91,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             'only' => ['index', 'show']
         ]
     );
-    Route::apiResource('service-enquiries', ServiceEnquiryController::class)->only(['store']);
+
     Route::apiResource('posts', PostController::class)->only(['show']);
 });
 
@@ -115,5 +119,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         'comments' => CommentController::class,
         'services' => ServiceController::class,
         'testimonials' => TestimonialController::class,
+        'our-service-enquiries' => OurServiceEnquiryController::class,
     ]);
 });
