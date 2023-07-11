@@ -8,6 +8,7 @@ use App\Models\ProductType;
 use App\Models\Service;
 use App\Models\SubCategory;
 use App\Models\Testimonial;
+use App\Models\Transaction;
 use Illuminate\Database\Seeder;
 use Symfony\Component\HttpKernel\DependencyInjection\ServicesResetter;
 
@@ -21,6 +22,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            MembershipPlanSeeder::class,
             UserSeeder::class,
             AreaSeeder::class,
             ModeOfPaymentSeeder::class,
@@ -41,6 +43,9 @@ class DatabaseSeeder extends Seeder
             ServiceSeeder::class,
             TestimonialSeeder::class,
             OurServiceEnquirySeeder::class,
+            AdEnquirSeeder::class,
+            SubscriptionRequestSeeder::class,
+            TransactionSeeder::class,
         ]);
     }
 }

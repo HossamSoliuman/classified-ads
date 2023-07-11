@@ -24,10 +24,10 @@ class UpdateBannerRequest extends FormRequest
     public function rules()
     {
         return [
-            'image' => 'nullabe|image|max:2048',
-            'link' => 'nullabe|url',
-            'parent_id' => 'nullabe|integer',
-            'type' => 'nullabe|in:category,subcategory',
+            'image' => 'nullable|image|max:2048',
+            'link' => 'nullable|url',
+            'parent_id' => 'nullable|integer',
+            'type' => 'nullable|in:category,subcategory',
         ];
     }
 }

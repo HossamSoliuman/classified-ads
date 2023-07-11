@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use App\Http\Resources\AdResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\PaginatedResource;
 use App\Models\Ad;
+use App\Models\Banner;
 use App\Traits\ApiResponse;
 use App\Traits\ManagesFiles;
 
@@ -109,5 +111,14 @@ class CategoryController extends Controller
         return $this->successResponse(
             CategoryResource::make($category)
         );
+    }
+    public function featuredAds($category){
+        $ads=Ad::where('category_id',$category)->where('featured',2)->get();
+        return $this->successResponse(AdResource::collection($ads));
+
+    }
+    public function banners($category){
+        $banners=Banner::where('type',Banner::CATEGORY_TYPE)->where('parent_id',$category)->get();
+        return $this->successResponse($banners);
     }
 }

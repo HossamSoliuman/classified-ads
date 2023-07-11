@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\SubCategory;
 use App\Http\Requests\StoreSubCategoryRequest;
 use App\Http\Requests\UpdateSubCategoryRequest;
+use App\Http\Resources\AdResource;
 use App\Models\Ad;
+use App\Models\Banner;
 use App\Traits\ApiResponse;
 
 class SubCategoryController extends Controller
@@ -76,5 +78,13 @@ class SubCategoryController extends Controller
         $this->deleteFile($subCategory->banner->image);
         $subCategory->banner()->delete();
         return $this->customResponse([], 'Successfully deleted');
+    }
+    public function featuredAds($sub_category){
+        $ads=Ad::where('sub_category_id',$sub_category)->where('featured',1)->get();
+        return $this->successResponse(AdResource::collection($ads));
+    }
+    public function banners($sub_category){
+        $banners=Banner::where('type',Banner::SUBCATEGORY_TYPE)->where('parent_id',$sub_category)->get();
+        return $this->successResponse($banners);
     }
 }

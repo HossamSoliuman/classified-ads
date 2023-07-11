@@ -5,21 +5,23 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBannerRequest;
 use App\Http\Requests\UpdateBannerRequest;
 use App\Models\Banner;
+use App\Models\Category;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponse;
 use App\Traits\ManagesFiles;
 
 class BannerController extends Controller
 {
-    use ApiResponse,ManagesFiles;
+    use ApiResponse, ManagesFiles;
     /**
      * Display a listing of the resource.
-     *
+     *2
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $banners=Banner::with('parent')->get();
+        $banners = Banner::paginate(10);
         return $this->successResponse($banners);
     }
 
@@ -31,10 +33,10 @@ class BannerController extends Controller
      */
     public function store(StoreBannerRequest $request)
     {
-        $image=$this->uploadFile($request->validated('image'),Banner::PATH);
-        $data=$request->validated();
-        $data['image']=$image;
-        $banner=Banner::create($data);
+        $image = $this->uploadFile($request->validated('image'), Banner::PATH);
+        $data = $request->validated();
+        $data['image'] = $image;
+        $banner = Banner::create($data);
         return $this->successResponse($banner);
     }
 
@@ -46,7 +48,12 @@ class BannerController extends Controller
      */
     public function show(Banner $banner)
     {
-        $banner->load('parent');
+        if ($banner->type == Banner::CATEGORY_TYPE)
+            $banner->load('category');
+
+        if ($banner->type == Banner::SUBCATEGORY_TYPE)
+            $banner->load('subcategory');
+
         return $this->successResponse($banner);
     }
 
@@ -59,15 +66,15 @@ class BannerController extends Controller
      */
     public function update(UpdateBannerRequest $request, Banner $banner)
     {
-        $image=$request->validated('image');
-        $data=$request->validated();
-        if($image){
+        $image = $request->validated('image');
+        $data = $request->validated();
+        if ($image) {
             $this->deleteFile($banner->image);
-            $this->uploadFile($image,Banner::PATH);
-            $data['image']=$image;
+            $this->uploadFile($image, Banner::PATH);
+            $data['image'] = $image;
         }
         $banner->update($data);
-        return $this->successResponse($data);
+        return $this->successResponse($banner);
     }
 
     /**
@@ -80,6 +87,6 @@ class BannerController extends Controller
     {
         $this->deleteFile($banner->image);
         $banner->delete();
-        return $this->customResponse([],'deleted');
+        return $this->customResponse([], 'deleted');
     }
 }

@@ -26,7 +26,7 @@ class StoreBannerRequest extends FormRequest
         return [
             'image' => 'required|image|max:2048',
             'link' => 'required|url',
-            'parent_id' => 'required|integer',
+            'parent_id' => 'required|integer|exists:categories,id|required_if:type,category|exists:sub_categories,id|required_if:type,subcategory',
             'type' => 'required|in:category,subcategory',
         ];
     }

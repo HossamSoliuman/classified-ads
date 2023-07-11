@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SearchHomeRequest;
+use App\Http\Resources\AdResource;
 use App\Http\Resources\HomeSearchResource;
 use App\Models\Ad;
 use Illuminate\Http\Request;
@@ -42,5 +43,9 @@ class HomePageController extends Controller
         $ads = HomeSearchResource::collection($ads);
 
         return $this->successResponse($ads);
+    }
+    public function featuredAds(){
+        $ads=Ad::where('featured',3)->get();
+        return $this->successResponse(AdResource::collection($ads));
     }
 }

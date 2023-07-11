@@ -64,4 +64,16 @@ class User extends Authenticatable
     public function ads(){
         return $this->hasMany(Ad::class);
     }
+    public function recievedAdsEnquires(){
+        return $this->hasMany(AdEnquir::class,'ad_owner_id');
+    }
+    public function sentAdsEnquires(){
+        return $this->hasMany(AdEnquir::class,'sender_id');
+    }
+    public function usage(){
+        return $this->hasOne('usage');
+    }
+    public function memberships(){
+        return $this->hasMany(Membership::class);
+    }
 }

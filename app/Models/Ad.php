@@ -19,12 +19,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Ad extends Model
 {
     use HasFactory;
+    
     const DRAFT = 'draft';
     const PENDING_APPROVAL = 'pending_approval';
     const APPROVED = 'approved';
     const PUBLISHED = 'published';
     const REJECTED = 'rejected';
     const SUSPENDED = 'suspended';
+
     const PATH = 'images/ads';
     protected $fillable = [
         'start_date',
@@ -54,14 +56,12 @@ class Ad extends Model
         'features',
         'product_description',
         'company_description',
-        'featured',
-        
+        'custom_rating'
     ];
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
@@ -106,11 +106,27 @@ class Ad extends Model
     {
         return $this->belongsTo(OfferType::class);
     }
-    public function productImages(){
+    public function productImages()
+    {
         return $this->hasMany(ProductImage::class);
     }
-    public function reviews(){
+    public function reviews()
+    {
         return $this->hasMany(Review::class);
     }
-
+    public function returnPolicy(){
+        return $this->belongsTo(returnPolicy::class);
+    }
+    public function getRatingAttribute()
+    {
+        $reviews = $this->reviews;
+        if($this->custom_rating){
+            return $this->custom_rating;
+        }
+        if ($reviews->isNotEmpty()) {
+            return $reviews->sum('number_of_stars') / $reviews->count();
+        } else {
+            return null;
+        }
+    }
 }

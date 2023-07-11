@@ -25,8 +25,8 @@ class UpdateAdRequest extends FormRequest
     {
         return [
             'start_date' => 'nullable|date',
-            'status' => 'nullable|string',
-            'user_id' => 'nullable|integer|exists:users,id',
+            // 'status' => 'nullable|string',
+            // 'user_id' => 'nullable|integer|exists:users,id',
             'badge' => 'nullable|string',
             'product_title' => 'nullable|string',
             'address' => 'nullable|string',

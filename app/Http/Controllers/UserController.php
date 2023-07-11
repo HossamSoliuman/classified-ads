@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
+use App\Models\Membership;
+use App\Models\Usage;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponse;
@@ -59,9 +61,8 @@ class UserController extends Controller
         $user = User::find(auth()->id());
         if ($request->validated('img')) {
             $this->deleteFile($user->image);
-           $image = $this->uploadFile($request->validated('img'), User::PATH);
+            $image = $this->uploadFile($request->validated('img'), User::PATH);
             $user->update(['image' => $image]);
-            
         }
         $user->update($request->validated());
         return $this->successResponse(UserResource::make($user));
@@ -77,11 +78,31 @@ class UserController extends Controller
     {
         $this->deleteFile($user->image);
         $user->delete();
-        return $this->customResponse(null,'User Deleted');
+        return $this->customResponse(null, 'User Deleted');
     }
     public function auth()
     {
         $user = auth()->user();
         return $this->successResponse(UserResource::make($user));
+    }
+    public function authUsage()
+    {
+        $usage = Usage::where('user_id', auth()->id())->get();
+        return $this->successResponse($usage);
+    }
+    public function usage(User $user)
+    {
+        $usage = Usage::where('user_id', $user->id)->get();
+        return $this->successResponse($usage);
+    }
+    public function memberships(User $user)
+    {
+        $user->load('memberships');
+        $memberships = $user->memberships;
+        return $this->successResponse($memberships);
+    }
+    public function authMemberships(){
+        $memberships=Membership::with('MembershipPlan')->where('user_id',auth()->id())->get();
+        return $this->successResponse($memberships);
     }
 }

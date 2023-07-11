@@ -6,6 +6,8 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\RegisterResource;
 use App\Http\Resources\UserResource;
+use App\Models\MembershipPlan;
+use App\Models\Usage;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -25,6 +27,12 @@ class AuthenticationController extends Controller
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
+        $freePlan=MembershipPlan::find(1);
+        Usage::create([
+            'user_id'=>$user->id,
+            'used'=>0,
+            'max_limit'=>$freePlan->limit,
+        ]);
 
         return $this->customResponse(
             [
