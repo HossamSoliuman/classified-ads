@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\AdminMessage;
 use App\Models\ProductType;
 use App\Models\Service;
 use App\Models\SubCategory;
@@ -46,6 +47,7 @@ class DatabaseSeeder extends Seeder
             AdEnquirSeeder::class,
             SubscriptionRequestSeeder::class,
             TransactionSeeder::class,
+            AdminMessageSeeder::class,
         ]);
     }
 }

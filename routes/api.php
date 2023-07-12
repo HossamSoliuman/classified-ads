@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdController;
 use App\Http\Controllers\AdEnquirController;
+use App\Http\Controllers\AdminMessageController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\BannerController;
@@ -77,6 +78,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('my-ads', [UserDashboardController::class, 'myAds']);
         Route::get('enquires', [UserDashboardController::class, 'enquires']);
         Route::get('transactions',[UserDashboardController::class,'transactions']);
+        Route::get('admin-messages',[UserDashboardController::class,'adminMessages']);
+        Route::delete('admin-messages/{message}',[UserDashboardController::class,'deleteAdminMessageForMe']);
     });
     Route::apiResource('subscription-request', SubscriptionRequestController::class)->only('store');
     Route::get('users/auth/usage', [UserController::class, 'authUsage']);
@@ -163,5 +166,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         'transactions'=>TransactionController::class,
         'ad-enquires'=>AdEnquirController::class,
         'banners'=> BannerController::class,
+        'admin-messages'=>AdminMessageController::class,
     ]);
 });

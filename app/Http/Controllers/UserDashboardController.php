@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Ad;
 use App\Models\AdEnquir;
+use App\Models\AdminMessage;
+use App\Models\AdminMessageUser;
 use App\Models\Review;
 use App\Models\Transaction;
 use App\Models\User;
@@ -59,5 +61,24 @@ class UserDashboardController extends Controller
     public function transactions(){
         $transactions=Transaction::where('user_id',auth()->id())->orderBy('id','desc')->paginate(10);
         return $this->successResponse($transactions);
+    }
+    public function adminMessages(){
+       $user=User::with('adminMessages')->find(auth()->id(),['id']);
+       $messages=$user->adminMessages;
+       return $this->successResponse($messages);
+    }
+    public function deleteAdminMessageForMe($messageId)
+    {
+        // Find the admin message
+        $adminMessage = AdminMessage::findOrFail($messageId);
+    
+        // Delete the pivot records for the current user
+        $adminMessage->users()->detach(auth()->id());
+    
+        // If no users are associated with the message, delete the message itself
+        if ($adminMessage->users()->count() === 0) {
+            $adminMessage->delete();
+        }
+        return $this->customResponse([], 'deleted');
     }
 }

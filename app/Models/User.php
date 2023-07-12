@@ -42,6 +42,8 @@ class User extends Authenticatable
         'state',  
         'country' 
     ];
+  
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -51,6 +53,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'pivot',
+
     ];
 
     /**
@@ -75,5 +79,10 @@ class User extends Authenticatable
     }
     public function memberships(){
         return $this->hasMany(Membership::class);
+    }
+    
+    public function adminMessages()
+    {
+        return $this->belongsToMany(AdminMessage::class);
     }
 }
