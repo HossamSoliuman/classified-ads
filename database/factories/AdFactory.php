@@ -11,6 +11,11 @@ class AdFactory extends Factory
 
     public function definition()
     {
+        $socialLinks=[
+            'facebook' => 'https://facebook.com',
+            'twitter' => 'https://twitter.com',
+            'instagram' => 'https://instagram.com',
+        ];
         return [
             'start_date' => $this->faker->dateTimeThisMonth(),
             'status' => $this->faker->randomElement([
@@ -32,11 +37,7 @@ class AdFactory extends Factory
             'year_of_establishment' => $this->faker->year(),
             'gstn' => $this->faker->numerify('##########'),
             'pan' => $this->faker->numerify('##########'),
-            'social_links' => "
-                'facebook' => 'https://facebook.com',
-                'twitter' => 'https://twitter.com',
-                'instagram' => 'https://instagram.com',
-             ",
+            'social_links' => json_encode($socialLinks),
             'category_id' => $this->faker->numberBetween(1, 5), 
             'sub_category_id' => $this->faker->numberBetween(1, 5), 
             'product_type_id' => $this->faker->numberBetween(1, 5), 

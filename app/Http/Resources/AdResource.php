@@ -15,6 +15,7 @@ class AdResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id'=>$this->id,
             'start_date' => $this->start_date,
             'status' => $this->status,
             'user_id' => $this->user_id,
@@ -28,7 +29,7 @@ class AdResource extends JsonResource
             'year_of_establishment' => $this->year_of_establishment,
             'gstn' => $this->gstn,
             'pan' => $this->pan,
-            'social_links' => $this->social_links,
+            'social_links' => json_decode($this->social_links),
             'category' => $this->category,
             'sub_category' => $this->subCategory,
             'return_policy' => $this->returnPolicy->name,//

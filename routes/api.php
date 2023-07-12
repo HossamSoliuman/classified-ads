@@ -11,6 +11,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CustomRatingController;
+use App\Http\Controllers\FooterController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\MembershipPlanController;
@@ -29,6 +30,7 @@ use App\Http\Controllers\ServiceEnquiryController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\SubscriptionRequestController;
+use App\Http\Controllers\SuperadminController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UnitTypeController;
@@ -67,6 +69,7 @@ Route::get('posts/{post}/comments', [PostController::class, 'comments']);
 Route::apiResource('service-enquiries', ServiceEnquiryController::class)->only(['store']);
 Route::apiResource('our-service-enquiries', OurServiceEnquiryController::class)->only(['store']);
 Route::apiResource('membership-plans', MembershipPlanController::class)->only(['index', 'show']);
+Route::apiResource( 'footers',FooterController::class)->only(['index', 'show']);
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 // auth routes
 
@@ -140,6 +143,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('ads/unfeatured/{ad_id}', [AdController::class, 'setAdUnfeatured']);
     Route::get('ads/{ad}/set-rating/{rating}',[CustomRatingController::class,'setRating']);
     Route::get('ads/{ad}/unset-rating',[CustomRatingController::class,'unSetRating']);
+    Route::get('ads/{ad}/deactivate/{date}',[AdController::class,'deactivate']);
     Route::apiResources([
         'areas' => AreaController::class,
         'categories' => CategoryController::class,
@@ -167,5 +171,12 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         'ad-enquires'=>AdEnquirController::class,
         'banners'=> BannerController::class,
         'admin-messages'=>AdminMessageController::class,
+        'ads' =>AdController::class,
+        'footers'=>FooterController::class,
     ]);
+   
+});
+Route::middleware(['auth:sanctum','superadmin'])->group(function(){
+    Route::post('/superadmin/users/{user}/set-admin',[SuperadminController::class,'setAdmin']);
+    Route::post('/superadmin/users/{user}/unset-admin',[SuperadminController::class,'unsetAdmin']);
 });

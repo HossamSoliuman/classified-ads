@@ -146,57 +146,10 @@ class AdController extends Controller
         $updateService = new UpdateAdStatusService();
         return $updateService->updateStatus($ad, $status);
     }
-
-    public function updateStatusold(Ad $ad, $status)
-    {
-        $isOwner = auth()->id() == $ad->user_id;
-        $isAdmin = auth()->user()->role == 'admin';
-        $lastStatus = $ad->status;
-        $userUsage = Usage::where('user_id', $ad->user_id)->first();
-
-        if (!$isAdmin || !$isOwner) {
-            return $this->errorResponse('unauthorized action', 401);
-        }
-        if ($status == Ad::DRAFT) {
-            if ($isOwner && $lastStatus == Ad::PENDING_APPROVAL) {
-                $ad->status = $status;
-                return $this->successResponse($ad);
-            } else
-                return  $this->errorResponse('Ad status cant be updated', 400);
-        }
-        if ($status == Ad::APPROVED) {
-            if ($isAdmin && $lastStatus == Ad::PENDING_APPROVAL) {
-                $ad->status = $status;
-                return $this->successResponse($ad);
-            } else
-                return  $this->errorResponse('Ad status cant be updated', 400);
-        }
-        if ($status == Ad::PUBLISHED) {
-            if ($isOwner && in_array($lastStatus, [Ad::PENDING_APPROVAL, Ad::SUSPENDED])) {
-                if ($userUsage->used < $userUsage->max_limit) {
-                    $userUsage->increment('used', 1);
-                    $ad->status = $status;
-                } else {
-                    return $this->errorResponse('you reached the max limit upgrage your membership to can post more', 400);
-                }
-                return $this->successResponse($ad);
-            } else
-                return  $this->errorResponse('Ad status cant be updated', 400);
-        }
-        if ($status == Ad::REJECTED) {
-            if ($isAdmin && in_array($lastStatus, [Ad::PENDING_APPROVAL])) {
-                $ad->status = $status;
-                return $this->successResponse($ad);
-            } else
-                return  $this->errorResponse('Ad status cant be updated', 400);
-        }
-        if ($status == Ad::SUSPENDED) {
-            if ($isOwner && in_array($lastStatus, [Ad::PUBLISHED])) {
-                $userUsage->decrement('used', 1);
-                $ad->status = $status;
-                return $this->successResponse($ad);
-            } else
-                return  $this->errorResponse('Ad status cant be updated', 400);
-        }
+    public function deactivate(Ad $ad,$date){
+        $ad->update([
+            'deactivate_at' => $date,
+        ]);
+        return $this->customResponse($ad,'ad will be deactivated at '.$date);
     }
 }

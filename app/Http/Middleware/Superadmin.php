@@ -2,11 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use App\Traits\ApiResponse;
 use Closure;
 use Illuminate\Http\Request;
-
-class AdminMiddleware
+use App\Traits\ApiResponse;
+class Superadmin
 {
     use ApiResponse;
     /**
@@ -19,7 +18,7 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next)
     {
         $role=auth()->user()->role;
-        if (auth()->user() &&  $role == 'admin' || $role == 'superadmin') {
+        if (auth()->user() && $role == 'superadmin') {
             return $next($request);
         }
      

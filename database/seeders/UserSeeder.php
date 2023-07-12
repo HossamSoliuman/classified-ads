@@ -15,8 +15,8 @@ class UserSeeder extends Seeder
         $freePlan = MembershipPlan::find(1);
         
         User::factory()->create([
-            'role' => 'admin',
-            'email' => 'admin@gmail.com',
+            'role' => 'superadmin',
+            'email' => 'superadmin@gmail.com',
         ]);
         
         Usage::create([

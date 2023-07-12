@@ -23,7 +23,7 @@ class CreateAdsTable extends Migration
             $table->year('year_of_establishment')->nullable();
             $table->string('gstn')->nullable();
             $table->string('pan')->nullable();
-            $table->text('social_links')->nullable();
+            $table->json('social_links')->nullable();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->foreignId('sub_category_id')->constrained()->cascadeOnDelete();
             $table->foreignId('product_type_id')->constrained()->cascadeOnDelete();
