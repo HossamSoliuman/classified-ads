@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('ad_enquirs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sender_id')->constrained('users');
-            $table->foreignId('ad_owner_id')->constrained('users');
-            $table->foreignId('ad_id')->constrained();
+            $table->foreignId('sender_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('ad_owner_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('ad_id')->constrained()->cascadeOnDelete();
             $table->text('body');
             $table->timestamps();
         });

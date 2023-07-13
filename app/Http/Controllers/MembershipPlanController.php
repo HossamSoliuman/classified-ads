@@ -65,6 +65,10 @@ class MembershipPlanController extends Controller
      */
     public function destroy(MembershipPlan $membershipPlan)
     {
-        
+        if($membershipPlan->id==1){
+            return $this->errorResponse('You cant delete default plan',400);
+        }
+        $membershipPlan->delete();
+        return $this->customResponse([],'deleted');
     }
 }

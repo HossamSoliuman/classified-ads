@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->dateTime('starts_at');
             $table->dateTime('ends_at');
-            $table->foreignId('membership_plan_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('membership_plan_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->integer('limit');
             $table->timestamps();
         });

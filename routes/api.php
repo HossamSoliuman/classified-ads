@@ -8,8 +8,10 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BoxController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CareerEnquireController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ContactUsEnquireController;
 use App\Http\Controllers\CustomRatingController;
 use App\Http\Controllers\FooterController;
 use App\Http\Controllers\HomePageController;
@@ -19,6 +21,7 @@ use App\Http\Controllers\ModeOfPaymentController;
 use App\Http\Controllers\OfferTypeController;
 use App\Http\Controllers\OrderTypeController;
 use App\Http\Controllers\OurServiceEnquiryController;
+use App\Http\Controllers\PartnerEnquireController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PriceTypeController;
 use App\Http\Controllers\ProductImageController;
@@ -69,7 +72,15 @@ Route::get('posts/{post}/comments', [PostController::class, 'comments']);
 Route::apiResource('service-enquiries', ServiceEnquiryController::class)->only(['store']);
 Route::apiResource('our-service-enquiries', OurServiceEnquiryController::class)->only(['store']);
 Route::apiResource('membership-plans', MembershipPlanController::class)->only(['index', 'show']);
-Route::apiResource( 'footers',FooterController::class)->only(['index', 'show']);
+Route::apiResource('footers', FooterController::class)->only(['index', 'show']);
+Route::apiResources([
+    'career-enquires' => CareerEnquireController::class,
+    'partner-enquires' => PartnerEnquireController::class,
+    'contact-us-enquires' => ContactUsEnquireController::class,
+
+], [
+    'only' => ['store']
+]);
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 // auth routes
 
@@ -80,18 +91,19 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('reviews', [UserDashboardController::class, 'reviews']);
         Route::get('my-ads', [UserDashboardController::class, 'myAds']);
         Route::get('enquires', [UserDashboardController::class, 'enquires']);
-        Route::get('transactions',[UserDashboardController::class,'transactions']);
-        Route::get('admin-messages',[UserDashboardController::class,'adminMessages']);
-        Route::delete('admin-messages/{message}',[UserDashboardController::class,'deleteAdminMessageForMe']);
+        Route::get('transactions', [UserDashboardController::class, 'transactions']);
+        Route::get('admin-messages', [UserDashboardController::class, 'adminMessages']);
+        Route::delete('admin-messages/{message}', [UserDashboardController::class, 'deleteAdminMessageForMe']);
     });
+    Route::post('logout', [AuthenticationController::class, 'logout']);
+    Route::put('auth/update', [AuthenticationController::class, 'update']);
     Route::apiResource('subscription-request', SubscriptionRequestController::class)->only('store');
     Route::get('users/auth/usage', [UserController::class, 'authUsage']);
     Route::get('users/auth/memberships', [UserController::class, 'authMemberships']);
-    Route::post('logout', [AuthenticationController::class, 'logout']);
     Route::apiResource('users', UserController::class)->only(['show']);
     Route::post('users', [UserController::class, 'update']);
     Route::get('auth', [UserController::class, 'auth']);
-    Route::apiResource('ad-enquires',AdEnquirController::class)->only(['store','show','delete']);
+    Route::apiResource('ad-enquires', AdEnquirController::class)->only(['store', 'show', 'delete']);
 
     Route::apiResources(
         [
@@ -137,13 +149,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::apiResource('users', UserController::class)->only(['destroy', 'index']);
     Route::delete('product-images', [ProductImageController::class, 'destroy']);
-    Route::get('ads/featured/{ad_id}', [AdController::class, 'setAdFeatured']);
+    Route::get('ads/{ad_id}/featured/{value}', [AdController::class, 'setAdFeatured']);
     Route::get('users/{user}/usage', [UserController::class, 'usage']); //user usage
     Route::get('users/{user}/memberships', [UserController::class, 'memberships']); //user usage
     Route::get('ads/unfeatured/{ad_id}', [AdController::class, 'setAdUnfeatured']);
-    Route::get('ads/{ad}/set-rating/{rating}',[CustomRatingController::class,'setRating']);
-    Route::get('ads/{ad}/unset-rating',[CustomRatingController::class,'unSetRating']);
-    Route::get('ads/{ad}/deactivate/{date}',[AdController::class,'deactivate']);
+    Route::get('ads/{ad}/set-rating/{rating}', [CustomRatingController::class, 'setRating']);
+    Route::get('ads/{ad}/unset-rating', [CustomRatingController::class, 'unSetRating']);
+    Route::get('ads/{ad}/deactivate/{date}', [AdController::class, 'deactivate']);
     Route::apiResources([
         'areas' => AreaController::class,
         'categories' => CategoryController::class,
@@ -167,16 +179,19 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         'membership-plans' => MembershipPlanController::class,
         'memberships' => MembershipController::class,
         'subscription-request' => SubscriptionRequestController::class,
-        'transactions'=>TransactionController::class,
-        'ad-enquires'=>AdEnquirController::class,
-        'banners'=> BannerController::class,
-        'admin-messages'=>AdminMessageController::class,
-        'ads' =>AdController::class,
-        'footers'=>FooterController::class,
+        'transactions' => TransactionController::class,
+        'ad-enquires' => AdEnquirController::class,
+        'banners' => BannerController::class,
+        'admin-messages' => AdminMessageController::class,
+        'ads' => AdController::class,
+        'footers' => FooterController::class,
+        'career-enquires' => CareerEnquireController::class,
+        'partner-enquires' => PartnerEnquireController::class,
+        'contact-us-enquires' => ContactUsEnquireController::class,
+
     ]);
-   
 });
-Route::middleware(['auth:sanctum','superadmin'])->group(function(){
-    Route::post('/superadmin/users/{user}/set-admin',[SuperadminController::class,'setAdmin']);
-    Route::post('/superadmin/users/{user}/unset-admin',[SuperadminController::class,'unsetAdmin']);
+Route::middleware(['auth:sanctum', 'superadmin'])->group(function () {
+    Route::post('/superadmin/users/{user}/set-admin', [SuperadminController::class, 'setAdmin']);
+    Route::post('/superadmin/users/{user}/unset-admin', [SuperadminController::class, 'unsetAdmin']);
 });

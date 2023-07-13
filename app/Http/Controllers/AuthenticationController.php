@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\UpdateAuthRequest;
+use App\Http\Requests\UpdateRequest;
 use App\Http\Resources\RegisterResource;
 use App\Http\Resources\UserResource;
 use App\Models\MembershipPlan;
@@ -21,17 +23,16 @@ class AuthenticationController extends Controller
     public function register(RegisterRequest $request)
     {
         $user = User::create([
-            'password'=>Hash::make($request->validated('password')),
-            'email'=>$request->validated('email'),
-            
+            'password' => Hash::make($request->validated('password')),
+            'email' => $request->validated('email'),
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
-        $freePlan=MembershipPlan::find(1);
+        $freePlan = MembershipPlan::find(1);
         Usage::create([
-            'user_id'=>$user->id,
-            'used'=>0,
-            'max_limit'=>$freePlan->limit,
+            'user_id' => $user->id,
+            'used' => 0,
+            'max_limit' => $freePlan->limit,
         ]);
 
         return $this->customResponse(
@@ -57,9 +58,8 @@ class AuthenticationController extends Controller
             [
                 'token' => $token,
                 'user' => UserResource::make($user),
-
             ],
-           'Logedin Succussfully'
+            'Logged in successfully'
         );
     }
 
@@ -67,6 +67,29 @@ class AuthenticationController extends Controller
     {
         $request->user()->tokens()->delete();
 
-        return $this->customResponse([],'Succussfully loged out');
+        return $this->customResponse([], 'Successfully logged out');
+    }
+
+    public function update(UpdateAuthRequest $request)
+    {
+        $user = $request->user();
+        $validated = $request->validated();
+
+        if (isset($validated['email'])) {
+            $user->email = $validated['email'];
+        }
+
+        if (isset($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
+        }
+
+        $user->save();
+
+        return $this->customResponse(
+            [
+                'user' => UserResource::make($user),
+            ],
+            'User updated successfully'
+        );
     }
 }

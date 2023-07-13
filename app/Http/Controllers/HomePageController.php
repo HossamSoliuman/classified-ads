@@ -45,7 +45,7 @@ class HomePageController extends Controller
         return $this->successResponse($ads);
     }
     public function featuredAds(){
-        $ads=Ad::where('featured',3)->get();
+        $ads=Ad::where('featured',Ad::Home_FEATURED)->where('status',Ad::PUBLISHED)->get();
         return $this->successResponse(AdResource::collection($ads));
     }
 }

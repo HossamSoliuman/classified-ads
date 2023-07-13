@@ -30,6 +30,10 @@ class Ad extends Model
 
     const PATH = 'images/ads';
 
+    const Home_FEATURED=3;
+    const CATEGORY_FEATURED=2;
+    const SUPCATEGORY_FEATURED=1;
+    const UNFEATURED=0;
     
     protected $fillable = [
         'start_date',
@@ -61,6 +65,7 @@ class Ad extends Model
         'company_description',
         'custom_rating',
         'deactivate_at',
+        'featured',
     ];
     public function user(): BelongsTo
     {

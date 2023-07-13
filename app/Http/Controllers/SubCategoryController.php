@@ -46,7 +46,7 @@ class SubCategoryController extends Controller
     public function show(SubCategory $subCategory)
     {
         $ads = Ad::where('sub_category_id', $subCategory->id)
-            ->orderBy('featured', 'desc')
+            ->where('status', Ad::PUBLISHED)
             ->paginate(8);
         $subCategory->ads = $ads;
         return $this->successResponse($subCategory);
@@ -74,17 +74,22 @@ class SubCategoryController extends Controller
     public function destroy(SubCategory $subCategory)
     {
         $subCategory->delete();
-        if($subCategory->banner)
-        $this->deleteFile($subCategory->banner->image);
+        if ($subCategory->banner)
+            $this->deleteFile($subCategory->banner->image);
         $subCategory->banner()->delete();
         return $this->customResponse([], 'Successfully deleted');
     }
-    public function featuredAds($sub_category){
-        $ads=Ad::where('sub_category_id',$sub_category)->where('featured',1)->get();
+    public function featuredAds($sub_category)
+    {
+        $ads = Ad::where('sub_category_id', $sub_category)
+            ->where('status', Ad::PUBLISHED)
+            ->where('featured', Ad::SUPCATEGORY_FEATURED)
+            ->get();
         return $this->successResponse(AdResource::collection($ads));
     }
-    public function banners($sub_category){
-        $banners=Banner::where('type',Banner::SUBCATEGORY_TYPE)->where('parent_id',$sub_category)->get();
+    public function banners($sub_category)
+    {
+        $banners = Banner::where('type', Banner::SUBCATEGORY_TYPE)->where('parent_id', $sub_category)->get();
         return $this->successResponse($banners);
     }
 }

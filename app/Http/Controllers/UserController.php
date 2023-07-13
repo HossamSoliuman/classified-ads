@@ -97,7 +97,7 @@ class UserController extends Controller
     }
     public function memberships(User $user)
     {
-        $user->load('memberships');
+        $user->load('memberships.MembershipPlan');
         $memberships = $user->memberships;
         return $this->successResponse($memberships);
     }

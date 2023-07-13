@@ -21,7 +21,7 @@ class MembershipController extends Controller
      */
     public function index()
     {
-        $memberships = Membership::with(['user', 'plan'])->get();
+        $memberships = Membership::with(['user', 'MembershipPlan'])->get();
         return $this->successResponse($memberships);
     }
 
@@ -89,12 +89,12 @@ class MembershipController extends Controller
     public function destroy(Membership $membership)
     {
         $user_id = $membership->user_id;
-        $usage = Usage::where('user_id', $user_id)->get();
+        $usage = Usage::where('user_id', $user_id)->first();
         $usage->update([
             'max_limit' => $usage->max_limit - $membership->limit,
         ]);
         $overflow_ads = $usage->used - $usage->max_limit;
-        if (!$overflow_ads) {
+        if ($overflow_ads > 0) {
             for ($i = 0; $i < $overflow_ads; $i++) {
                 $published_ad = Ad::where('status', Ad::PUBLISHED)
                     ->where('user_id', $user_id)->get();
@@ -104,7 +104,7 @@ class MembershipController extends Controller
             }
         }
         $membership->delete();
-        if (!$overflow_ads > -1) {
+        if ($overflow_ads < 0) {
             $overflow_ads = 0;
         }
         return $this->successResponse([

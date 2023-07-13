@@ -54,9 +54,8 @@ class CategoryController extends Controller
         $category->load(['subCategories']);
 
         $ads = Ad::where('category_id', $category->id)
-            ->orderBy('featured', 'desc')
+            ->where('status', Ad::PUBLISHED)
             ->paginate(16);
-
         $category->ads = $ads;
 
         return $this->successResponse([
@@ -101,7 +100,7 @@ class CategoryController extends Controller
         $category->delete();
         return $this->customResponse([], 'Successfully deleted');
     }
-   
+
     public function posts(Category $category)
     {
         $category->load(['posts' => function ($query) {
@@ -112,13 +111,18 @@ class CategoryController extends Controller
             CategoryResource::make($category)
         );
     }
-    public function featuredAds($category){
-        $ads=Ad::where('category_id',$category)->where('featured',2)->get();
+    public function featuredAds($category)
+    {
+        $ads = Ad::where('category_id', $category)
+            ->where('status', Ad::PUBLISHED)
+            ->where('featured', Ad::CATEGORY_FEATURED)
+            ->get();
         return $this->successResponse(AdResource::collection($ads));
-
     }
-    public function banners($category){
-        $banners=Banner::where('type',Banner::CATEGORY_TYPE)->where('parent_id',$category)->get();
+    public function banners($category)
+    {
+        $banners = Banner::where('type', Banner::CATEGORY_TYPE)->where('parent_id', $category)->get();
         return $this->successResponse($banners);
     }
 }
+

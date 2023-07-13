@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 class AdController extends Controller
 {
     use ApiResponse, ManagesFiles;
-    private $relations=[
+    private $relations = [
         'category',
         'subCategory',
         'productType',
@@ -119,7 +119,7 @@ class AdController extends Controller
         $ad->delete();
         return $this->customResponse([], 'succussfully deleted');
     }
-    public function setAdFeatured($ad_id,$value)
+    public function setAdFeatured($ad_id, $value)
     {
         //value reffers to showing ad in home or category or subcategory (3,2,1) 
         $ad = Ad::find($ad_id);
@@ -146,10 +146,11 @@ class AdController extends Controller
         $updateService = new UpdateAdStatusService();
         return $updateService->updateStatus($ad, $status);
     }
-    public function deactivate(Ad $ad,$date){
+    public function deactivate(Ad $ad, $date)
+    {
         $ad->update([
             'deactivate_at' => $date,
         ]);
-        return $this->customResponse($ad,'ad will be deactivated at '.$date);
+        return $this->customResponse($ad, 'ad will be deactivated at ' . $date);
     }
 }
